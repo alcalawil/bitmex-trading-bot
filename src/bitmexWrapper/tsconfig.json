@@ -1,0 +1,16 @@
+{
+	"compilerOptions": {
+		"target": "es5",
+		"lib": [ "es6" ],
+		"module": "commonjs",
+		"declaration": true,
+		"outDir": "../dist",
+		"importHelpers": true,
+		"strict": true,
+		"sourceMap": true,
+		"esModuleInterop": true,
+		"experimentalDecorators": true,
+		"downlevelIteration": true,
+		"skipLibCheck": true
+	}
+}
