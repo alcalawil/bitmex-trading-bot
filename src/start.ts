@@ -1,13 +1,13 @@
 import { BitmexAPI, BitmexOptions } from './bitmexWrapper';
+import { config } from '@config';
 
 const options: BitmexOptions = {
-  apiKeyID: process.env.BITMEX_KEY_ID,
-  apiKeySecret: process.env.BITMEX_KEY_SECRET,
-  testnet: true
+  apiKeyID: config.bitmexKeyId,
+  apiKeySecret: config.bitmexSecretKey,
+  testnet: config.useTestnet
 };
 
 const bitmex = new BitmexAPI(options);
-
 
 (async () => {
   console.log('Hello world');

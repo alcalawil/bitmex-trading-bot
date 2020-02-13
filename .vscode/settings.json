@@ -1,5 +1,8 @@
 {
-  "cSpell.words": [],
+  "cSpell.words": [
+    "Bitmex",
+    "testnet"
+  ],
   "editor.rulers": [90],
   "editor.formatOnSave": false,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
