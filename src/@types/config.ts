@@ -5,4 +5,5 @@ export interface IConfig {
   bitmexSecretKey: string;
   serverPort: number;
   useTestnet: boolean;
+  serverApiKey?: string;
 }

@@ -16,7 +16,9 @@
     "paths": {
       "@src/*": ["src/*.ts"],
       "@types": ["src/@types"],
-      "@config": ["src/config"]
+      "@config": ["src/config"],
+      "@shared": ["src/shared"],
+      
     },
     "types": ["node"],
     "typeRoots": ["node_modules/@types"]

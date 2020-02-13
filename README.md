@@ -2,4 +2,4 @@
 
 
 ## TODO
-  - Add Bitmex responses types
+  - Improve Logger

@@ -1,10 +1,16 @@
 import { BitmexAPI, BitmexOptions } from './bitmexWrapper';
 import { config } from '@config';
+import app from './API/server';
+import { logger } from '@shared';
+
+app.listen(config.serverPort, () => {
+  logger.info('Express server started on port: ' + config.serverPort);
+});
 
 const options: BitmexOptions = {
   apiKeyID: config.bitmexKeyId,
   apiKeySecret: config.bitmexSecretKey,
-  testnet: config.useTestnet
+  testnet: config.useTestnet,
 };
 
 const bitmex = new BitmexAPI(options);
