@@ -61,7 +61,7 @@ export abstract class BitmexAbstractAPI {
             reset: parseInt(<string>response.headers['x-ratelimit-reset'], 10) * 1000
         };
 
-        return response.data;
+        return <T>response.data;
     }
 
     private timeout(ms: number) {
