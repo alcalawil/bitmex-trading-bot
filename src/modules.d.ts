@@ -6,5 +6,6 @@ declare namespace NodeJS {
     SERVER_PORT?: string;
     BITMEX_TESTNET?: string;
     API_KEY?: string;
+    LOG_LEVEL: string;
   }
 }

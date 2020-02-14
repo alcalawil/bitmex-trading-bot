@@ -1,10 +1,15 @@
 import { IConfig } from '@types';
+import { logger } from '../shared';
 const ENV = process.env;
 
 // Validate required configs here
 if (!ENV.BITMEX_KEY_ID || !ENV.BITMEX_KEY_SECRET) {
   process.exitCode = 1;
   throw new Error('INVALID BITMEX CREDENTIALS');
+}
+
+if (!ENV.API_KEY) {
+  console.warn('Warning! No API KEY Set');
 }
 
 const config: IConfig = {
