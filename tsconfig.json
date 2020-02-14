@@ -18,7 +18,8 @@
       "@types": ["src/@types"],
       "@config": ["src/config"],
       "@shared": ["src/shared"],
-      "@services": ["src/services"]
+      "@services": ["src/services"],
+      "@bitmex": ["src/bitmex"]
     },
     "types": ["node"],
     "typeRoots": ["node_modules/@types"]

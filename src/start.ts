@@ -1,8 +1,8 @@
-import { BitmexAPI, BitmexOptions } from './bitmexWrapper';
+import { BitmexAPI, BitmexOptions } from '@bitmex';
 import { config } from '@config';
 import app from './API/server';
 import { logger } from '@shared';
-import { gettersService } from '@services';
+import { gettersService, operationsService } from '@services';
 
 app.listen(config.serverPort, () => {
   logger.info('Express server started on port: ' + config.serverPort);
@@ -17,6 +17,7 @@ const options: BitmexOptions = {
 const bitmexClient = new BitmexAPI(options);
 
 gettersService.setDependencies(bitmexClient);
+operationsService.setDependencies(bitmexClient);
 
 (async () => {
   console.log('Hello world');

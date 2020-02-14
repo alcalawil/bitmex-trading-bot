@@ -1,12 +1,15 @@
-import { gettersService } from './gettersService';
-import {config} from '@config';
+import { config } from '@config';
+import { BitmexAPI } from '@bitmex';
+
+let api: BitmexAPI;
 
 class OperationsService {
-  public setDependencies() {
+  public setDependencies(bitmexClient: BitmexAPI) {
+    api = bitmexClient;
   }
 
   public async placeOrder() {
-    const responseOrder = {};
+    const responseOrder = await api.Order.new({ symbol: 'XBTUSD', orderQty: 1 });
     return responseOrder;
   }
 
@@ -14,7 +17,7 @@ class OperationsService {
     return this.placeOrder();
   }
 
-  public async sell(){
+  public async sell() {
     return this.placeOrder();
   }
 
@@ -24,7 +27,7 @@ class OperationsService {
   }
 
   public async cancelMyOrders(pair: string) {
-    const canceledOrders= {}
+    const canceledOrders = {};
     return canceledOrders;
   }
 }
