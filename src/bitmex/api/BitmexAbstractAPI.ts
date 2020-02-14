@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import { parse as urlParse } from 'url';
 
 import { getAuthHeaders } from '../common/BitmexAuth';
@@ -43,12 +43,15 @@ export abstract class BitmexAbstractAPI {
             opts
         }) : {};
 
-        const options = {
+        const options: AxiosRequestConfig = {
             method,
             url,
-            headers,
-            ...opts
+            headers
         };
+
+        if (opts.form) {
+            options.data = opts.form
+        }
 
         const timeout = this.getRateLimitTimeout();
         if (timeout > 0) { await this.timeout(timeout); }

@@ -15,14 +15,15 @@ export function getAuthHeaders({ apiKeyID, apiKeySecret, opts, method, path }: I
   if (apiKeyID == null || apiKeySecret == null) {
     return {};
   }
-  if (opts.qs) {
-    path += '?' + stringify(opts.qs);
-  }
-  const data = opts.form ? stringify(opts.form) : '';
+//   if (opts.qs) {
+//     path += '?' + stringify(opts.qs);
+//   }
+  const body = opts.form ? JSON.stringify(opts.form) : '';
   const expires = generateNonce();
   const _path = path.substring(path.indexOf('/api'));
-  const message = method + _path + expires + data;
-  const signature = HmacSHA256(message, apiKeySecret).toString(enc.Hex);
+
+  const signature = sign(apiKeySecret, method, _path, expires, body);
+
   return {
     'Content-Type': 'application/json',
     'api-expires': expires.toString(),
@@ -40,3 +41,10 @@ export function getWSAuthQuery(apiKeyID: string, apiKeySecret: string) {
     'api-signature': signature,
   });
 }
+
+export const sign = (apiKeySecret: string, method: string, path: string, expires: number, body = '') => {
+  const message = method + path + expires + body;
+  const signature = HmacSHA256(message, apiKeySecret).toString(enc.Hex);
+  return signature;
+};
+
