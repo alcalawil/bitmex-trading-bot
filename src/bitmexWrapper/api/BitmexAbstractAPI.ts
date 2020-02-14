@@ -53,7 +53,13 @@ export abstract class BitmexAbstractAPI {
         const timeout = this.getRateLimitTimeout();
         if (timeout > 0) { await this.timeout(timeout); }
 
-        const response = await axios(options);
+        let response 
+        try {
+            response = await axios(options);
+        } catch (err) {
+            const message = `${err.message} \n ${err.response.data.error.message}`;
+            throw new Error(message);
+        }
 
         this.ratelimit = {
             limit: parseInt(<string>response.headers['x-ratelimit-limit'], 10),
