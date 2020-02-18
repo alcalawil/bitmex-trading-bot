@@ -20,13 +20,15 @@ class OperationsService {
   }
 
   public async cancelOrder(orderOptions: OrderDelete) {
+    // TODO: Allow receiving multiple orderIds --> Fix OrderDelete interface
     const order = await api.Order.cancel(orderOptions);
     return order;
   }
 
-  public async cancelMyOrders(pair: string) {
-    const canceledOrders = {};
-    return canceledOrders;
+  public async cancelAll() {
+    // TODO: Receive optional params
+    const orders = await api.Order.cancelAll();
+    return orders;
   }
 }
 
