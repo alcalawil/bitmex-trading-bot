@@ -19,7 +19,8 @@
       "@config": ["src/config"],
       "@shared": ["src/shared"],
       "@services": ["src/services"],
-      "@bitmex": ["src/bitmex"]
+      "@bitmex": ["src/bitmex"],
+      "@bitmexInterfaces": ["src/bitmex/common/BitmexInterfaces"]
     },
     "types": ["node"],
     "typeRoots": ["node_modules/@types"]

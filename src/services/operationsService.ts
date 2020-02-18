@@ -1,5 +1,6 @@
 import { config } from '@config';
 import { BitmexAPI } from '@bitmex';
+import { OrderPost, OrderDelete } from '@bitmexInterfaces';
 
 let api: BitmexAPI;
 
@@ -8,22 +9,14 @@ class OperationsService {
     api = bitmexClient;
   }
 
-  public async placeOrder() {
-    const responseOrder = await api.Order.new({ symbol: 'XBTUSD', orderQty: 1 });
+  public async postOrder(orderOptions: OrderPost) {
+    const responseOrder = await api.Order.new(orderOptions);
     return responseOrder;
   }
 
-  public async buy(price: number, amount: number, pair: string) {
-    return this.placeOrder();
-  }
-
-  public async sell() {
-    return this.placeOrder();
-  }
-
-  public async cancelOrder(orderId: string) {
-    const parsedOrder = {};
-    return parsedOrder;
+  public async cancelOrder(orderOptions: OrderDelete) {
+    const order = await api.Order.cancel(orderOptions);
+    return order;
   }
 
   public async cancelMyOrders(pair: string) {

@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import OrdersRouter from './Orders';
+import OrdersRouter from './Order';
 import FundsRouter from './Funds';
 
 const router = Router();
@@ -12,7 +12,7 @@ router.get('/status', (req: Request, res: Response) => {
 });
 
 // Add sub-routes
-router.use('/orders', OrdersRouter);
+router.use('/order', OrdersRouter);
 router.use('/funds', FundsRouter);
 
 export default router;
