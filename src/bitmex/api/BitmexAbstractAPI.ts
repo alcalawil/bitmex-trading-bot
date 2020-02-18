@@ -30,7 +30,7 @@ export abstract class BitmexAbstractAPI {
 
     protected async request<T>(method: APIMethods, endpoint: string, opts: { qs?: any; form?: any; }, auth = false) {
         if (opts.qs && Object.keys(opts.qs).length === 0) { delete opts.qs; }
-        if (opts.form && Object.keys(opts.form).length === 0) { delete opts.form; }
+        if (opts.form && !Array.isArray(opts.form) && Object.keys(opts.form).length === 0) { delete opts.form; }
 
         const url = `${this.host}${this.basePath}${endpoint}`;
         const path = urlParse(url).pathname || '';

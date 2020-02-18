@@ -1,7 +1,7 @@
 import { config } from '@config';
 import { BitmexAPI } from '../bitmex';
 import { logger } from '../shared';
-import { UserMarginQuery } from '../bitmex/common/BitmexInterfaces';
+import { UserMarginQuery, OrderQuery } from '../bitmex/common/BitmexInterfaces';
 
 let api: BitmexAPI;
 
@@ -10,8 +10,8 @@ class GettersService {
     api = bitmexClient;
   }
 
-  public async getOrders() {
-    const orders: any = [];
+  public async getMyOrders(orderQuery: OrderQuery) {
+    const orders = await api.Order.getOrders(orderQuery);
 
     return orders;
   }
@@ -45,13 +45,13 @@ class GettersService {
     const oneSatochiInBTC = 0.00000001;
     try {
       // const qs: UserMarginQuery
-      const balances = await api.User.getMargin({ currency: 'all'});
+      const balances = await api.User.getMargin({ currency: 'all' });
       if (balances.currency === 'XBt') {
         balances.amount = balances.amount * oneSatochiInBTC;
       }
       return balances;
-    } catch(err) {
-      logger.error(err.message)
+    } catch (err) {
+      logger.error(err.message);
     }
   }
 }

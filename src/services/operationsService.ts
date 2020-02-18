@@ -1,6 +1,6 @@
 import { config } from '@config';
 import { BitmexAPI } from '@bitmex';
-import { OrderPost, OrderDelete } from '@bitmexInterfaces';
+import { OrderPost, OrderDelete, OrderBulkPost } from '@bitmexInterfaces';
 
 let api: BitmexAPI;
 
@@ -11,6 +11,11 @@ class OperationsService {
 
   public async postOrder(orderOptions: OrderPost) {
     const responseOrder = await api.Order.new(orderOptions);
+    return responseOrder;
+  }
+
+  public async postBulkOrders(orders: OrderPost[]) {
+    const responseOrder = await api.Order.newBulk({ orders });
     return responseOrder;
   }
 

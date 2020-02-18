@@ -3,10 +3,25 @@ import { CREATED, OK, INTERNAL_SERVER_ERROR, NOT_FOUND, BAD_REQUEST } from 'http
 import { logger } from '@shared';
 import { config } from '@config';
 import { HTTPError } from '@types';
-import { operationsService } from '@services';
+import { operationsService, gettersService } from '@services';
 import { OrderPost } from '@bitmexInterfaces';
 
 const router = Router();
+
+/*******************************************************************************
+ *                       Post Order - "POST /api/order"
+ ******************************************************************************/
+router.get('/', async (req: Request, res: Response, next: NextFunction) => {
+  const open = req.query.open || false;
+  try {
+    // FIXME: Filter not working
+    const orders = await gettersService.getMyOrders({ filter: { open } });
+    res.status(CREATED).json(orders);
+  } catch (err) {
+    logger.error(err.message);
+    next(new HTTPError(err.message, INTERNAL_SERVER_ERROR));
+  }
+});
 
 /*******************************************************************************
  *                       Post Order - "POST /api/order"
@@ -35,6 +50,23 @@ router.delete('/:orderId', async (req: Request, res: Response, next: NextFunctio
     res.status(CREATED).json({
       message: 'Order canceled',
       order,
+    });
+  } catch (err) {
+    logger.error(err);
+    next(new HTTPError(err.message, INTERNAL_SERVER_ERROR));
+  }
+});
+
+/*******************************************************************************
+ *                       Post Bulk Orders - "POST /api/order/bulk"
+ ******************************************************************************/
+router.post('/bulk', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const bulkOrders: OrderPost[] = req.body;
+    const orders = await operationsService.postBulkOrders(bulkOrders);
+    res.status(CREATED).json({
+      message: 'Orders Posted',
+      orders,
     });
   } catch (err) {
     logger.error(err);

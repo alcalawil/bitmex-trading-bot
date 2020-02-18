@@ -316,7 +316,7 @@ export class BitmexAPI extends BitmexAbstractAPI {
          *
          * For now, only `application/json` is supported on this endpoint.
          */
-        newBulk: async (form: BITMEX.OrderBulkPost = {}) =>
+        newBulk: async (form: BITMEX.OrderBulkPost) =>
             this.request<BITMEX.Order[]>('POST', '/order/bulk', { form }, true),
 
         /**
