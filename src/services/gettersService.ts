@@ -11,24 +11,19 @@ class GettersService {
   }
 
   public async getMyOrders(orderQuery: OrderQuery) {
+    // FIXME: There is a problem using filters
     const orders = await api.Order.getOrders(orderQuery);
-
     return orders;
   }
 
   public async getOrderById(orderId: string) {
-    const responseOrder = {};
-
-    return responseOrder;
+    // TODO
+    return {};
   }
 
   public async getOrderbook(pair: string, limit = 100) {
-    const sellOrders = {};
-    const buyOrders = {};
-    return {
-      sellOrders,
-      buyOrders,
-    };
+    // TODO
+    return {};
   }
 
   public async getAsk(pair: string) {

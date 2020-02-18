@@ -41,23 +41,6 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
 });
 
 /*******************************************************************************
- *                       Cancel Order - "DELETE /api/order/ORDER_ID"
- ******************************************************************************/
-router.delete('/:orderId', async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const orderId = req.params.orderId;
-    const order = await operationsService.cancelOrder({ orderID: orderId });
-    res.status(CREATED).json({
-      message: 'Order canceled',
-      order,
-    });
-  } catch (err) {
-    logger.error(err);
-    next(new HTTPError(err.message, INTERNAL_SERVER_ERROR));
-  }
-});
-
-/*******************************************************************************
  *                       Post Bulk Orders - "POST /api/order/bulk"
  ******************************************************************************/
 router.post('/bulk', async (req: Request, res: Response, next: NextFunction) => {
@@ -67,6 +50,39 @@ router.post('/bulk', async (req: Request, res: Response, next: NextFunction) => 
     res.status(CREATED).json({
       message: 'Orders Posted',
       orders,
+    });
+  } catch (err) {
+    logger.error(err);
+    next(new HTTPError(err.message, INTERNAL_SERVER_ERROR));
+  }
+});
+
+/*******************************************************************************
+ *                       Cancel All Orders - "DELETE /api/order/all"
+ ******************************************************************************/
+router.delete('/all', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const orders = await operationsService.cancelAll();
+    res.status(CREATED).json({
+      message: 'Orders Canceled',
+      orders,
+    });
+  } catch (err) {
+    logger.error(err);
+    next(new HTTPError(err.message, INTERNAL_SERVER_ERROR));
+  }
+});
+
+/*******************************************************************************
+ *                       Cancel Order - "DELETE /api/order/ORDER_ID"
+ ******************************************************************************/
+router.delete('/:orderId', async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const orderId = req.params.orderId;
+    const order = await operationsService.cancelOrder({ orderID: orderId });
+    res.status(CREATED).json({
+      message: 'Order canceled',
+      order,
     });
   } catch (err) {
     logger.error(err);
