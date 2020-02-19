@@ -14,7 +14,9 @@
     "start-prod": "cross-env NODE_ENV=production node -r ./env -r module-alias/register ./dist/src/start.js",
     "start": "nodemon --config \"./util/nodemon.json\"",
     "start-docker": "node -r module-alias/register ./dist/src/start.js",
-    "test": "jest --config ./jest.config.js"
+    "test": "jest --config ./jest.config.js --coverage",
+    "test:watch": "jest --coverage --watchAll",
+    "view:coverage": "serve coverage/lcov-report"
   },
   "repository": {
     "type": "git",
@@ -69,6 +71,7 @@
     "jest": "^25.1.0",
     "nodemon": "^2.0.2",
     "prettier": "^1.19.1",
+    "serve": "^11.3.0",
     "ts-jest": "^25.2.0",
     "ts-node": "^8.6.2",
     "tsconfig-paths": "^3.9.0",
