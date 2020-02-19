@@ -15,8 +15,8 @@ router.get('/balances', async (req: Request, res: Response, next: NextFunction) 
     const balances = await gettersService.getBalances();
     res.status(CREATED).json(balances);
   } catch (err) {
-    logger.error(err);
-    next(new HTTPError(err, INTERNAL_SERVER_ERROR));
+    logger.error(err.message);
+    next(new HTTPError(err.message, INTERNAL_SERVER_ERROR));
   }
 });
 

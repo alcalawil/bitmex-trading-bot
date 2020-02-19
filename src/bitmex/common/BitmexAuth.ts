@@ -1,28 +1,26 @@
 import { HmacSHA256, enc } from 'crypto-js';
 import { stringify } from 'querystring';
+import { json } from 'express';
 
 interface IAuthHeaders {
   apiKeyID: string | null;
   apiKeySecret: string | null;
   method: string;
-  path: string;
-  opts: { qs?: any; form?: any };
+  url: string; // Must include querystring
+  body?: object;
 }
 
 const generateNonce = () => Math.round(Date.now() / 1000) + 60;
 
-export function getAuthHeaders({ apiKeyID, apiKeySecret, opts, method, path }: IAuthHeaders) {
+export function getAuthHeaders({ apiKeyID, apiKeySecret, method, url, body }: IAuthHeaders) {
   if (apiKeyID == null || apiKeySecret == null) {
     return {};
   }
-//   if (opts.qs) {
-//     path += '?' + stringify(opts.qs);
-//   }
-  const body = opts.form ? JSON.stringify(opts.form) : '';
-  const expires = generateNonce();
-  const _path = path.substring(path.indexOf('/api'));
 
-  const signature = sign(apiKeySecret, method, _path, expires, body);
+  const expires = generateNonce();
+  const path = url.substring(url.indexOf('/api'));
+
+  const signature = sign(apiKeySecret, method, path, expires, body);
 
   return {
     'Content-Type': 'application/json',
@@ -42,9 +40,9 @@ export function getWSAuthQuery(apiKeyID: string, apiKeySecret: string) {
   });
 }
 
-export const sign = (apiKeySecret: string, method: string, path: string, expires: number, body = '') => {
-  const message = method + path + expires + body;
+export const sign = (apiKeySecret: string, method: string, path: string, expires: number, body?: object) => {
+  const data = body ? JSON.stringify(body) : '';
+  const message = method + path + expires + data;
   const signature = HmacSHA256(message, apiKeySecret).toString(enc.Hex);
   return signature;
 };
-
