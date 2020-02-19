@@ -3,10 +3,15 @@
 # env files
 production.env
 development.env
-test.env
 
 # compiled
 /dist
 
 # logs
 logs/
+
+# sourcemap
+src/**/*.map
+
+# tests
+coverage
