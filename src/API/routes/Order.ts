@@ -12,10 +12,10 @@ const router = Router();
  *                       Post Order - "POST /api/order"
  ******************************************************************************/
 router.get('/', async (req: Request, res: Response, next: NextFunction) => {
-  const open = req.query.open || false;
+  const filter: string = req.query.filter || undefined;
+
   try {
-    // FIXME: Filter not working
-    const orders = await gettersService.getMyOrders({ filter: { open } });
+    const orders = await gettersService.getMyOrders({ filter });
     res.status(CREATED).json(orders);
   } catch (err) {
     logger.error(err.message);

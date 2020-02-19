@@ -1122,7 +1122,7 @@ export interface OrderQuery {
     /**
      * Generic table filter. Send JSON key/value pairs, such as `{"key": "value"}`. You can key on individual fields, and do more advanced querying on timestamps. See the [Timestamp Docs](https://www.bitmex.com/app/restAPI#Timestamp-Filters) for more details.
      */
-    filter?: any;
+    filter?: string;
 
     /**
      * Array of column names to fetch. If omitted, will return all columns.

@@ -1,5 +1,4 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import { format as urlFormat } from 'url';
 
 import { getAuthHeaders } from '../common/BitmexAuth';
 import { BitmexOptions } from '../common/BitmexOptions';
@@ -38,15 +37,13 @@ export abstract class BitmexAbstractAPI {
       url += `?${queryStringify(opts.qs)}`;
     }
 
-    const encodedUrl = urlFormat(url);
-
     // Create Headers
     const headers = auth
       ? getAuthHeaders({
           apiKeyID: this.apiKeyID,
           apiKeySecret: this.apiKeySecret,
           method,
-          url: encodedUrl,
+          url,
           body: opts.form,
         })
       : {};
@@ -54,7 +51,7 @@ export abstract class BitmexAbstractAPI {
     // Request Options
     const options: AxiosRequestConfig = {
       method,
-      url: encodedUrl,
+      url,
       headers,
     };
 
