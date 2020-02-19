@@ -14,7 +14,7 @@
     "start-prod": "cross-env NODE_ENV=production node -r ./env -r module-alias/register ./dist/src/start.js",
     "start": "nodemon --config \"./util/nodemon.json\"",
     "start-docker": "node -r module-alias/register ./dist/src/start.js",
-    "test": "nodemon --config \"./util/nodemon.test.json\""
+    "test": "jest --config ./jest.config.js"
   },
   "repository": {
     "type": "git",
@@ -57,6 +57,7 @@
     "@types/app-root-path": "^1.2.4",
     "@types/crypto-js": "^3.1.43",
     "@types/express": "^4.17.2",
+    "@types/jest": "^25.1.2",
     "@types/node": "^13.7.1",
     "@types/ws": "^7.2.1",
     "@typescript-eslint/eslint-plugin": "^2.19.2",
@@ -65,8 +66,10 @@
     "dotenv": "^8.2.0",
     "eslint": "^6.8.0",
     "fs-extra": "^8.1.0",
+    "jest": "^25.1.0",
     "nodemon": "^2.0.2",
     "prettier": "^1.19.1",
+    "ts-jest": "^25.2.0",
     "ts-node": "^8.6.2",
     "tsconfig-paths": "^3.9.0",
     "typescript": "^3.7.5"
