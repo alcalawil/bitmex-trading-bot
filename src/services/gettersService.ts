@@ -38,16 +38,12 @@ class GettersService {
 
   public async getBalances() {
     const oneSatochiInBTC = 0.00000001;
-    try {
-      // const qs: UserMarginQuery
-      const balances = await api.User.getMargin({ currency: 'all' });
-      if (balances.currency === 'XBt') {
-        balances.amount = balances.amount * oneSatochiInBTC;
-      }
-      return balances;
-    } catch (err) {
-      logger.error(err.message);
+    // const qs: UserMarginQuery
+    const balances = await api.User.getMargin({ currency: 'all' });
+    if (balances.currency === 'XBt') {
+      balances.amount = balances.amount * oneSatochiInBTC;
     }
+    return balances;
   }
 }
 
