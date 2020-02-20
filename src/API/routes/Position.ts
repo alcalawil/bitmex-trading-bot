@@ -1,18 +1,18 @@
 import { Request, Response, Router, NextFunction } from 'express';
 import { CREATED, OK, INTERNAL_SERVER_ERROR } from 'http-status-codes';
 import { logger } from '@shared';
-import { config } from '@config';
 import { HTTPError } from '@types';
 import { operationsService, gettersService } from '@services';
 
 const router = Router();
 
 /****** ************************************************************************
- *                       Get Balances - "GET /api/funds/balances"
+ *                       Choose Leverage - "POST /api/position/leverage"
  ******************************************************************************/
-router.get('/balances', async (req: Request, res: Response, next: NextFunction) => {
+router.post('/leverage', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const balances = await gettersService.getBalances();
+    const { symbol, leverage }: { symbol: string; leverage: number } = req.body;
+    const balances = await operationsService.updateLeverage({ symbol, leverage });
     res.status(CREATED).json(balances);
   } catch (err) {
     logger.error(err.message);

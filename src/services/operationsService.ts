@@ -1,6 +1,6 @@
 import { config } from '@config';
 import { BitmexAPI } from '@bitmex';
-import { OrderPost, OrderDelete, OrderBulkPost } from '@bitmexInterfaces';
+import { OrderPost, OrderDelete, OrderBulkPost, PositionLeveragePost } from '@bitmexInterfaces';
 
 let api: BitmexAPI;
 
@@ -29,6 +29,10 @@ class OperationsService {
     // TODO: Receive optional params
     const orders = await api.Order.cancelAll();
     return orders;
+  }
+
+  public async updateLeverage(options: PositionLeveragePost) {
+    return api.Position.updateLeverage(options);
   }
 }
 
