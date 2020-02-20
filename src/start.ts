@@ -4,10 +4,6 @@ import app from './API/server';
 import { logger } from '@shared';
 import { gettersService, operationsService } from '@services';
 
-app.listen(config.serverPort, () => {
-  logger.info('Express server started on port: ' + config.serverPort);
-});
-
 const options: BitmexOptions = {
   apiKeyID: config.bitmexKeyId,
   apiKeySecret: config.bitmexSecretKey,
@@ -21,9 +17,11 @@ operationsService.setDependencies(bitmexClient);
 
 (async () => {
   console.log('Hello world');
-  const announcements = await bitmexClient.Announcement.get();
-  console.log('Announcements:', announcements[0].title);
 })();
+
+app.listen(config.serverPort, () => {
+  logger.info('Express server started on port: ' + config.serverPort);
+});
 
 process
   .on('unhandledRejection', (reason, p) => {

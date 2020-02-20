@@ -1,7 +1,6 @@
-import { config } from '@config';
 import { BitmexAPI } from '../bitmex';
 import { logger } from '../shared';
-import { UserMarginQuery, OrderQuery } from '../bitmex/common/BitmexInterfaces';
+import { UserMarginQuery, OrderQuery, TradeBucketedQuery } from '../bitmex/common/BitmexInterfaces';
 
 let api: BitmexAPI;
 
@@ -44,6 +43,11 @@ class GettersService {
       balances.amount = balances.amount * oneSatochiInBTC;
     }
     return balances;
+  }
+
+  public async getOHLC(options: TradeBucketedQuery) {
+    const candles = await api.Trade.getBucketed(options);
+    return candles;
   }
 }
 
