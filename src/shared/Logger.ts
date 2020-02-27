@@ -1,10 +1,5 @@
-/**
- * Setup the winston logger.
- *
- * Documentation: https://github.com/winstonjs/winston
- */
-
-import { createLogger, format, transports,  } from 'winston';
+import { createLogger, format, transports } from 'winston';
+import WinstonCloudWatch from 'winston-cloudwatch';
 import { config } from '@config';
 
 const { File, Console } = transports;
@@ -15,27 +10,17 @@ const winstonLogger = createLogger({
 });
 
 /**
- * For production write to all logs with level `info` and below
- * to `combined.log. Write all logs error (and below) to `error.log`.
- * For development, print to the console.
- */
+ * For production write to all logs will go to AWS CloudWatch
+ **/
 if (config.nodeEnv === 'production') {
-  // FIXME: Cuando se corre en docker se detiene el proceso debido a
-  // que no existe la carpeta './logs'. Posible solucion: realizar un mkdir en el dockerfile.
-  // Error: ENOENT: no such file or directory, mkdir './logs'
-  const fileFormat = format.combine(format.timestamp(), format.json());
-  const errTransport = new File({
-    filename: './logs/error.log',
-    format: fileFormat,
-    level: 'error',
-  });
-  const infoTransport = new File({
-    filename: './logs/combined.log',
-    format: fileFormat,
-  });
-  winstonLogger.add(errTransport);
-  winstonLogger.add(infoTransport);
+  winstonLogger.add(
+    new WinstonCloudWatch({
+      logGroupName: 'testing',
+      logStreamName: 'first',
+    }),
+  );
 } else {
+  // development
   const errorStackFormat = format(info => {
     if (info.stack) {
       // tslint:disable-next-line:no-console
