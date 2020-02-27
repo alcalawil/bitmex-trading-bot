@@ -16,7 +16,7 @@
     "start-docker": "node -r module-alias/register ./dist/src/start.js",
     "test": "jest --config ./jest.config.js --coverage",
     "test:watch": "jest --coverage --watchAll",
-    "view:coverage": "serve coverage/lcov-report"
+    "coverage": "serve coverage/lcov-report"
   },
   "repository": {
     "type": "git",
@@ -39,6 +39,7 @@
     "@types/cors": "^2.8.6",
     "@types/morgan": "^1.7.37",
     "app-root-path": "^3.0.0",
+    "aws-sdk": "^2.627.0",
     "axios": "^0.19.2",
     "cookie-parser": "^1.4.4",
     "cors": "^2.8.5",
@@ -53,6 +54,8 @@
     "tslib": "^1.10.0",
     "typescript-formatter": "^7.2.2",
     "winston": "^3.2.1",
+    "winston-cloudwatch": "^2.3.0",
+    "winston-transport": "^4.3.0",
     "ws": "^7.2.1"
   },
   "devDependencies": {
