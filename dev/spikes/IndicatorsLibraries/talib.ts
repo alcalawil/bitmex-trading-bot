@@ -1,4 +1,5 @@
 import * as talib from 'talib-binding';
+import fs from 'fs';
 
 const records = [
   { Time: 0, Open: 1, High: 2, Low: 1, Close: 2, Volume: 1 },
@@ -15,8 +16,19 @@ const closes = [
   15
 ]
 
-const result = talib.EMA(closes, 3);
-console.log(result);
+// Load market data
+var marketContents = fs.readFileSync(__dirname + '/marketdata.json', 'utf8');
+var marketData = JSON.parse(marketContents);
 
-// The COS function contains implicit parameter name, you need to call it as follow:
-// talib.COS(records, 'Volume')
+// EMA Example
+// const ema = talib.EMA(marketData.close, 50);
+// console.log(ema);
+
+
+// MACD Example
+const macd = talib.MACD(marketData.close, 50, 200);
+console.log(macd[0]);
+
+// MACD Example
+const bollinger = talib.BBANDS(marketData.close, 50);
+console.log(bollinger);
