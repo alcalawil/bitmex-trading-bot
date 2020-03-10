@@ -10,6 +10,7 @@ class OperationsService {
   }
 
   public async postOrder(orderOptions: OrderPost) {
+    // TODO: Recibir solo parámetro que la estrategia pueda enviar
     const responseOrder = await api.Order.new(orderOptions);
     return responseOrder;
   }

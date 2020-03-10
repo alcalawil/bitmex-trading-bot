@@ -1,6 +1,6 @@
-import { BitmexAPI } from '../bitmex';
-import { logger } from '../shared';
-import { UserMarginQuery, OrderQuery, TradeBucketedQuery } from '../bitmex/common/BitmexInterfaces';
+import { BitmexAPI } from '../../bitmex';
+import { logger } from '../../shared';
+import { UserMarginQuery, OrderQuery, TradeBucketedQuery } from '../../bitmex/common/BitmexInterfaces';
 
 let api: BitmexAPI;
 

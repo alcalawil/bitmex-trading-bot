@@ -27,8 +27,8 @@ var marketData = JSON.parse(marketContents);
 
 // MACD Example
 const macd = talib.MACD(marketData.close, 50, 200);
-console.log(macd[0]);
+console.log(macd[2]);
 
-// MACD Example
-const bollinger = talib.BBANDS(marketData.close, 50);
-console.log(bollinger);
+// BB Example
+// const bollinger = talib.BBANDS(marketData.close, 50);
+// console.log(bollinger);
