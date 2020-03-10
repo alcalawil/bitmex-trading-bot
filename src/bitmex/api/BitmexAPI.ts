@@ -302,7 +302,7 @@ export class BitmexAPI extends BitmexAbstractAPI {
          * Cancel order(s). Send multiple order IDs to cancel in bulk.Either an orderID or a clOrdID must be provided.
          */
         cancel: async (form: BITMEX.OrderDelete = {}) =>
-            this.request<BITMEX.Order[]>('DELETE', '/order', { form }, true),
+            this.request<BITMEX.Order>('DELETE', '/order', { form }, true),
 
         /**
          * @Authorized

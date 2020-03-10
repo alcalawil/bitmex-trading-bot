@@ -3,6 +3,7 @@ import { config } from '@config';
 import app from './API/server';
 import { logger } from '@shared';
 import { gettersService, operationsService } from '@services';
+import * as Strategy from '@Strategy';
 
 const options: BitmexOptions = {
   apiKeyID: config.bitmexKeyId,
@@ -31,3 +32,5 @@ process
     console.error(err, 'Uncaught Exception thrown');
     process.exit(1);
   });
+
+Strategy.start();

@@ -18,9 +18,11 @@
       "@types": ["src/@types"],
       "@config": ["src/config"],
       "@shared": ["src/shared"],
-      "@services": ["src/services"],
+      "@services": ["src/Trader/services"],
+      "@trader": ["src/Trader/services"],
       "@bitmex": ["src/bitmex"],
-      "@bitmexInterfaces": ["src/bitmex/common/BitmexInterfaces"]
+      "@bitmexInterfaces": ["src/bitmex/common/BitmexInterfaces"],
+      "@Strategy": ["src/Strategy"]
     },
     "types": ["node", "jest"],
     "typeRoots": ["node_modules/@types"]
