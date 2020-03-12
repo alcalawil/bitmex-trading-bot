@@ -22,7 +22,8 @@
       "@trader": ["src/Trader/services"],
       "@bitmex": ["src/bitmex"],
       "@bitmexInterfaces": ["src/bitmex/common/BitmexInterfaces"],
-      "@Strategy": ["src/Strategy"]
+      "@Strategy": ["src/Strategy"],
+      "@utils": ["src/shared/util"]
     },
     "types": ["node", "jest"],
     "typeRoots": ["node_modules/@types"]
