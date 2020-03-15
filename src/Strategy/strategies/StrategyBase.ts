@@ -4,7 +4,7 @@ export default abstract class StrategyBase {
   expiration: number;
 
   constructor(expiration: number) {
-    this.expiration = 5000;
+    this.expiration = expiration;
   }
 
   // TODO: A veces tiene que poder devolver null --> IStrategyOrder | null
