@@ -1665,7 +1665,7 @@ export interface TradeBucketedQuery {
     /**
      * Time interval to bucket by. Available options: [1m,5m,1h,1d].
      */
-    binSize?: '1m' | '5m' | '1h' | '1d'; // DEFAULT: 1m
+    binSize?: string; // DEFAULT: 1m
 
     /**
      * If true, will send in-progress (incomplete) bins for the current time period.

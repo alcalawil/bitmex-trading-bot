@@ -1,10 +1,12 @@
 import { OrderPost } from '@bitmexInterfaces';
+import { type } from 'os';
 
-export interface ICandle {
-  open: number;
-  high: number;
-  low: number;
-  close: number;
+export interface ICandles {
+  open: number[];
+  high: number[];
+  low: number[];
+  close: number[];
+  volume?: number[];
 }
 
 // Best market prices
@@ -13,7 +15,7 @@ export interface IBestPrice {
   bid: number;
 }
 export interface IMarketData {
-  candles: ICandle[];
+  candles: ICandles;
   bestPrice: IBestPrice;
 }
 
