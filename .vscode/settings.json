@@ -3,6 +3,7 @@
     "Bitmex",
     "OHLC",
     "Satochi",
+    "bollinger",
     "testnet"
   ],
   "editor.rulers": [90],
