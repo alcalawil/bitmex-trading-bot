@@ -13,7 +13,8 @@ export class BuyCheap extends StrategyBase {
   }
 
   generateOrder(symbol: string, { candles, bestPrice }: IMarketData) {
-    const price = bestPrice.bid * 0.9; // 10% below market price
+    // TODO: use 2 decimals
+    const price = Math.round((bestPrice.bid * 0.9)); // 10% below market price
 
     const order: IStrategyOrder = {
       price,

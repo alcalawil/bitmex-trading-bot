@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid';
 import { operationsService as trader } from '@trader';
 import { logger } from '../shared';
 import { strategyFactory } from './strategies';
@@ -56,15 +57,16 @@ export default class StrategyModule {
     // TODO: Generar id interno uuid
     // TODO: Hacer el parseo por fuera, debería hacerse en la etapa previa (la de validación)
     const order = await trader.postOrder({
+      clOrdID: uuidv4(),
       symbol: symbol,
       orderQty: amount || 1,
       side: side === -1 ? 'Sell' : 'Buy',
-      price: price,
+      price: price
     });
   
     logger.debug('>>> Order response:', order);
   
-    cancelAfter(expiration, order.orderID);
+    cancelAfter(expiration, order.clOrdID);
   }
 }
 
@@ -78,7 +80,7 @@ const cancelAfter = (timeInMilliseconds: number, orderId: string) => {
   return new Promise<Order>((resolve, reject) => {
     setTimeout(async () => {
       try {
-        const canceledOrder = await trader.cancelOrder({ orderID: orderId });
+        const canceledOrder = await trader.cancelOrder({ clOrdID: orderId });
         logger.debug('<<< An order was canceled:', canceledOrder);
         return resolve(canceledOrder);
       } catch (err) {
