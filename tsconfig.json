@@ -23,6 +23,7 @@
       "@bitmex": ["src/bitmex"],
       "@bitmexInterfaces": ["src/bitmex/common/BitmexInterfaces"],
       "@Strategy": ["src/Strategy"],
+      "@Strategy/indicators": ["src/Strategy/indicators"],
       "@utils": ["src/shared/util"],
       "@etl": ["src/ETL"]
     },

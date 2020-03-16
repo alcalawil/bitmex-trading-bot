@@ -33,3 +33,9 @@ export interface IStrategyOrder {
   target?: number;
   expiration: number;
 }
+
+export interface IBollinger {
+  upperBand: number[];
+  middleBand: number[];
+  lowerBand: number[];
+}

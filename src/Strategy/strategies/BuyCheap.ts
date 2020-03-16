@@ -7,9 +7,9 @@ import StrategyBase from './StrategyBase';
 
 // TODO: Hacer una clase padre para todas las estrategias
 export class BuyCheap extends StrategyBase {
-  constructor(expiration?: number) {
+  constructor(id: string, expiration?: number) {
     expiration = 5000;
-    super(expiration);
+    super(id, expiration);
   }
 
   generateOrder(symbol: string, { candles, bestPrice }: IMarketData) {
