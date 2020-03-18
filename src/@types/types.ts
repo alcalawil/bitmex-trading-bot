@@ -10,13 +10,14 @@ export interface ICandles {
 }
 
 // Best market prices
-export interface IBestPrice {
+export interface IQuotePrice {
   ask: number;
   bid: number;
 }
 export interface IMarketData {
+  pair: string;
   candles: ICandles;
-  bestPrice: IBestPrice;
+  quotePrice: IQuotePrice;
 }
 
 export const MarketSide = {
@@ -38,4 +39,8 @@ export interface IBollinger {
   upperBand: number[];
   middleBand: number[];
   lowerBand: number[];
+}
+
+export interface IBollingerOptions {
+  numberOfPeriods: number;
 }

@@ -1,4 +1,4 @@
-import { ICandles, IBestPrice, IMarketData } from '@types';
+import { ICandles, IQuotePrice, IMarketData } from '@types';
 import { BitmexSocket, BitmexAPI } from '../bitmex'; // TODO: Add absolute route to @bitmex in tsconfig
 import { EventEmitter } from 'events';
 import { Observable } from 'rxjs-compat';
@@ -56,7 +56,7 @@ export class ETL {
         const candles = await this.apiClient.Trade.getBucketed(options);
         return candles;
       } catch (err) {
-        throw new Error(`ETL > getOHLC > Bitmex API: ${err.message}`);
+        throw new Error(`ETL > getOHLC > Bitmex API: ${JSON.stringify(err)}`);
       }
     };
 
@@ -65,7 +65,7 @@ export class ETL {
     return candles;
   }
 
-  async getBestPrice(pair: string): Promise<IBestPrice> {
+  async getQuotePrice(pair: string): Promise<IQuotePrice> {
     const existInCache = false;
     if (existInCache) {
       // TODO:
@@ -74,7 +74,7 @@ export class ETL {
 
     try {
       const quotes = await this.apiClient.OrderBook.getL2({ symbol: pair, depth: 1 });
-      const ask = quotes.find(quote => quote.side === 'Sell')?.price; // TODO: Ver si esto funciona en node 12
+      const ask = quotes.find(quote => quote.side === 'Sell')?.price;
       const bid = quotes.find(quote => quote.side === 'Buy')?.price;
 
       if (!ask || !bid) {
@@ -92,11 +92,12 @@ export class ETL {
   async getMarketData(pair: string, period: string, candlesQuantity: number): Promise<IMarketData> {
     try {
       // FIXME: Use a Promise.all
-      const bestPrice = await this.getBestPrice(pair);
+      const quotePrice = await this.getQuotePrice(pair);
       const candles = await this.getCandles(pair, period, candlesQuantity);
 
       return {
-        bestPrice,
+        pair,
+        quotePrice,
         candles,
       };
     } catch (err) {

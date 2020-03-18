@@ -1,7 +1,7 @@
 import * as talib from 'talib-binding';
-import { ICandles, IBollinger } from '@types';
+import { ICandles, IBollinger, IBollingerOptions } from '@types';
 
-export const bollingerBands = (candles: ICandles, numberOfPeriods: number): IBollinger => {
+export const bollingerBands = (candles: ICandles, { numberOfPeriods }: IBollingerOptions): IBollinger => {
   const [upperBand, middleBand, lowerBand] = talib.BBANDS(candles.close, numberOfPeriods, 2, 2);
   return {
     upperBand,
