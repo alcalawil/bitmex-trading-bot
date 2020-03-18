@@ -12,9 +12,9 @@ export class BuyCheap extends StrategyBase {
     super(id, expiration);
   }
 
-  generateOrder(symbol: string, { candles, bestPrice }: IMarketData) {
+  async generateOrder(symbol: string, { candles, quotePrice }: IMarketData) {
     // TODO: use 2 decimals
-    const price = Math.round((bestPrice.bid * 0.9)); // 10% below market price
+    const price = Math.round((quotePrice.bid * 0.9)); // 10% below market price
 
     const order: IStrategyOrder = {
       price,

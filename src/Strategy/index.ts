@@ -17,10 +17,8 @@ export default class StrategyModule {
   }
 
   public start() {
-    let cycleNumber = 1;
     logger.debug('Strategy starting...');
     this.interval = setInterval(() => {
-      logger.debug('Trading Cycle:', cycleNumber++);
       this.strategyCycle(); // TODO: Validar que un ciclo aterior se haya ejecutado para poder llamar al siguiente. Igual esto a ser ejecutado desde eventos en vez d eun interval
     }, 15000);
   }
@@ -40,7 +38,7 @@ export default class StrategyModule {
     const marketData = await this.etl.getMarketData('XBTUSD', '1m', 50);
 
     const activeStrategy = strategyFactory('MeanReversionBB');
-    const strategyOrder = activeStrategy.generateOrder('XBTUSD', marketData);
+    const strategyOrder = await activeStrategy.generateOrder('XBTUSD', marketData);
 
     if (!strategyOrder) {
       logger.info('There are no orders to post');

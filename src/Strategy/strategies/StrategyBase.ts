@@ -9,5 +9,5 @@ export default abstract class StrategyBase {
   }
 
   // TODO: A veces tiene que poder devolver null --> IStrategyOrder | null
-  abstract generateOrder(symbol: string, { candles, bestPrice }: IMarketData): IStrategyOrder | null;
+  abstract generateOrder(symbol: string, { candles, quotePrice }: IMarketData): Promise<IStrategyOrder | null>;
 }

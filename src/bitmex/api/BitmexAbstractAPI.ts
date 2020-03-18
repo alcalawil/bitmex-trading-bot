@@ -3,6 +3,7 @@ import axios, { AxiosRequestConfig } from 'axios';
 import { getAuthHeaders } from '../common/BitmexAuth';
 import { BitmexOptions } from '../common/BitmexOptions';
 import { stringify as queryStringify } from 'querystring';
+import { logger } from '@shared';
 
 type APIMethods = 'GET' | 'POST' | 'DELETE' | 'PUT';
 
@@ -68,7 +69,8 @@ export abstract class BitmexAbstractAPI {
     try {
       response = await axios(options);
     } catch (err) {
-      const message = `${err.message} \n ${err.response.data.error.message}`;
+      const message = `${err.toJSON().message} \n ${err.toJSON().description}`;
+      logger.debug(message);
       throw new Error(message);
     }
 
