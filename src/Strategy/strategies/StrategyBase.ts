@@ -1,5 +1,6 @@
 import { IMarketData, IStrategyOrder } from '@types';
-
+import { OrderPost, Order } from '@bitmexInterfaces';
+import { Trader } from "@trader";
 export default abstract class StrategyBase {
   expiration: number;
   id: string;
@@ -8,6 +9,6 @@ export default abstract class StrategyBase {
     this.id = id;
   }
 
-  // TODO: A veces tiene que poder devolver null --> IStrategyOrder | null
-  abstract generateOrder(symbol: string, { candles, quotePrice }: IMarketData): Promise<IStrategyOrder | null>;
+  abstract onStart(marketData: IMarketData): Promise<any>;
+  abstract onFill(order: Order, marketData: IMarketData): Promise<any>;
 }

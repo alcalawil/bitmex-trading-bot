@@ -2,8 +2,10 @@ import { Request, Response, Router, NextFunction } from 'express';
 import { CREATED, OK, INTERNAL_SERVER_ERROR } from 'http-status-codes';
 import { logger } from '@shared';
 import { HTTPError } from '@types';
-import { operationsService, gettersService } from '@services';
+import { Trader } from '@trader';
+import { ETL } from '@etl';
 
+export default (trader: Trader, etl: ETL) => {
 const router = Router();
 
 /****** ************************************************************************
@@ -12,7 +14,7 @@ const router = Router();
 router.post('/leverage', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { symbol, leverage }: { symbol: string; leverage: number } = req.body;
-    const balances = await operationsService.updateLeverage({ symbol, leverage });
+    const balances = await trader.updateLeverage({ symbol, leverage });
     res.status(CREATED).json(balances);
   } catch (err) {
     logger.error(err.message);
@@ -20,4 +22,5 @@ router.post('/leverage', async (req: Request, res: Response, next: NextFunction)
   }
 });
 
-export default router;
+return router;
+};

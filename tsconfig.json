@@ -19,7 +19,7 @@
       "@config": ["src/config"],
       "@shared": ["src/shared"],
       "@services": ["src/Trader/services"],
-      "@trader": ["src/Trader/services"],
+      "@trader": ["src/Trader"],
       "@bitmex": ["src/bitmex"],
       "@bitmexInterfaces": ["src/bitmex/common/BitmexInterfaces"],
       "@Strategy": ["src/Strategy"],

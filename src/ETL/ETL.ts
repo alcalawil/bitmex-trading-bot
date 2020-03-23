@@ -1,7 +1,6 @@
 import { ICandles, IQuotePrice, IMarketData } from '@types';
-import { BitmexSocket, BitmexAPI } from '../bitmex'; // TODO: Add absolute route to @bitmex in tsconfig
+import { BitmexSocket, BitmexAPI } from '@bitmex';
 import { EventEmitter } from 'events';
-import { Observable } from 'rxjs-compat';
 import { TradeBin, TradeBucketedQuery } from '@bitmexInterfaces';
 
 export class ETL {
@@ -91,9 +90,10 @@ export class ETL {
 
   async getMarketData(pair: string, period: string, candlesQuantity: number): Promise<IMarketData> {
     try {
-      // FIXME: Use a Promise.all
-      const quotePrice = await this.getQuotePrice(pair);
-      const candles = await this.getCandles(pair, period, candlesQuantity);
+      const [quotePrice, candles] = await Promise.all([
+        this.getQuotePrice(pair),
+        this.getCandles(pair, period, candlesQuantity),
+      ]);
 
       return {
         pair,
@@ -105,32 +105,27 @@ export class ETL {
     }
   }
 
-  // async subscribeToCandles(pair: string, period: string, quantity: number): Observable<ICandles> {
-  //   let action = (data: any) => console.log(data);
+  getCandlesObservable(pair: string, period = '1m') {
+    switch (period) {
+      case '1m':
+        return this.ws.tradeBin1m(pair);
+      case '5m':
+        return this.ws.tradeBin5m(pair);
+      case '1h':
+        return this.ws.tradeBin1h(pair);
+      case '1d':
+        return this.ws.tradeBin1d(pair);
 
-  //   switch (period) {
-  //     case '1m':
-  //       this.ws.tradeBin1m('XBTUSD').subscribe({
-  //         next: ({ data }) => {
-  //           this.emitter.emit('CANDLES_1M_UPDATE', {});
-  //         },
-  //       });
+      default:
+        return this.ws.tradeBin1m(pair);
+    }
+  }
 
-  //       break;
+  getPositionObservable(pair: string) {
+    return this.ws.position(pair);
+  }
 
-  //     case '5m':
-  //     case '1h':
-  //     case '1d':
-
-  //     default:
-  //       return this.emitter;
-  //       break;
-  //   }
-  //   this.ws.tradeBin1m('XBTUSD');
-
-  //   // 1. Get candles(quantity) from mongo (mongo should be updated)
-  //   // return this.ws.tradeBin1m('XBTUSD');
-  // }
-
-  // async subscribeToBestPrice(pair: string) {}
+  getOrdersObservable(pair: string) {
+    return this.ws.order(pair);
+  }
 }

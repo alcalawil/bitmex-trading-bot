@@ -1,8 +1,8 @@
-import * as talib from 'talib-binding';
+import { BBANDS, MACD, MATypes } from 'talib-binding';
 import { ICandles, IBollinger, IBollingerOptions } from '@types';
 
 export const bollingerBands = (candles: ICandles, { numberOfPeriods }: IBollingerOptions): IBollinger => {
-  const [upperBand, middleBand, lowerBand] = talib.BBANDS(candles.close, numberOfPeriods, 2, 2);
+  const [upperBand, middleBand, lowerBand] = BBANDS(candles.close, numberOfPeriods, 2, 2, MATypes.EMA);
   return {
     upperBand,
     lowerBand,
@@ -11,5 +11,5 @@ export const bollingerBands = (candles: ICandles, { numberOfPeriods }: IBollinge
 };
 
 export const macd = (candles: ICandles) => {
-  return talib.MACD(candles.close, 50, 2);
+  return MACD(candles.close, 50, 2);
 };

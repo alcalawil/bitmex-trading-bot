@@ -1,5 +1,6 @@
 import { IStrategyOrder, MarketSide, IMarketData } from '@types';
 import StrategyBase from './StrategyBase';
+import { Order } from '@bitmexInterfaces';
 /**
  * Esta estrategia manda una orden de compra lejos del bid y pone un expire de 5 segundos para que
  * la orden sea cancelada 5 segundos luego de ser posteada
@@ -13,8 +14,7 @@ export class BuyCheap extends StrategyBase {
   }
 
   async generateOrder(symbol: string, { candles, quotePrice }: IMarketData) {
-    // TODO: use 2 decimals
-    const price = Math.round((quotePrice.bid * 0.9)); // 10% below market price
+    const price = Math.round(quotePrice.bid * 0.9); // 10% below market price
 
     const order: IStrategyOrder = {
       price,
@@ -24,4 +24,8 @@ export class BuyCheap extends StrategyBase {
     };
     return order;
   }
+
+  public async onStart({ candles, quotePrice }: IMarketData) {}
+  
+  public async onFill(order: Order, { candles, quotePrice }: IMarketData) {}
 }
