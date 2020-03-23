@@ -14,11 +14,10 @@ export function errorHandler(
     return next(err);
   }
 
-  // Error handling personalized
   res.status(err.status || 500);
   res.json({
     error: {
-      message: err.message // TODO: create function interpretError
+      message: err.message
     }
   });
 }

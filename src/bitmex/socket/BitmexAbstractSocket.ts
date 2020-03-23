@@ -9,9 +9,6 @@ import { BitmexOptions } from '../common/BitmexOptions';
 const debug = require('debug')('bitmex-node');
 const PING = 10 * 1000;
 
-// TODO
-// {"op": "cancelAllAfter", "args": 60000}
-
 export abstract class BitmexAbstractSocket {
 
     private tableSubject$ = new Subject<ITableMessage & { data: any[] }>();

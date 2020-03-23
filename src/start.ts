@@ -1,11 +1,10 @@
 import { BitmexAPI, BitmexOptions, BitmexSocket } from '@bitmex';
 import { config } from '@config';
-import app from './API/server';
+import api from './API/server';
 import { logger } from '@shared';
-import { gettersService, operationsService } from '@services';
-import Strategy from '@Strategy';
 import { ETL } from '@etl';
 import StrategyModule from '@Strategy';
+import { Trader } from '@trader'
 
 const options: BitmexOptions = {
   apiKeyID: config.bitmexKeyId,
@@ -13,23 +12,22 @@ const options: BitmexOptions = {
   testnet: config.useTestnet,
 };
 
-// Init BitMEX Client
+// Bitmex API and WS clients
 const bitmexClient = new BitmexAPI(options);
-gettersService.setDependencies(bitmexClient);
-operationsService.setDependencies(bitmexClient);
-
-// Init BitMEX WebSocket
 const bitmexWS = new BitmexSocket(options);
+
+// Init trader
+const trader = new Trader(bitmexClient);
 
 // Init ETL
 const bitmexETL = new ETL(bitmexWS, bitmexClient);
 
 // Init Strategy cycle
-const strategyModule = new StrategyModule(bitmexETL);
+const strategyModule = new StrategyModule(trader, bitmexETL);
 strategyModule.start();
 
 // Init API
-app.listen(config.serverPort, () => {
+api(trader, bitmexETL).listen(config.serverPort, () => {
   logger.info('Express server started on port: ' + config.serverPort);
 });
 

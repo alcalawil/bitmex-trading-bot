@@ -43,4 +43,5 @@ export interface IBollinger {
 
 export interface IBollingerOptions {
   numberOfPeriods: number;
+  standardDeviations: number;
 }

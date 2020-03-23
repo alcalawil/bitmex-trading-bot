@@ -276,8 +276,13 @@ export class BitmexAPI extends BitmexAbstractAPI {
          * PUT /api/v1/order {"origClOrdID": "abc-123", "clOrdID": "def-456", "leavesQty": 1000}
          * ```
          */
-        new: async (form: BITMEX.OrderPost) =>
-            this.request<BITMEX.Order>('POST', '/order', { form }, true),
+        new: async (form: BITMEX.OrderPost) => {
+            // TODO: Optimizar este redondeo: Ver con cuantos decimales falla la transacción
+            if (form.price && form.symbol === 'XBTUSD') {
+                form.price = parseFloat(form.price.toFixed(0));
+            }
+            return this.request<BITMEX.Order>('POST', '/order', { form }, true)
+        },
 
         /**
          * @Authorized

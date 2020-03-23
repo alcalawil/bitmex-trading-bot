@@ -1,12 +1,20 @@
-import { IMarketData, IBollinger, IBollingerOptions } from '@types';
+import { IMarketData, IBollinger, IBollingerOptions, ICandles } from '@types';
 import { logger } from '@shared';
 import { bollingerBands } from '../indicators';
 
 export class BollingerSignal {
-  public async advice({ quotePrice, candles }: IMarketData, bollingerOptions: IBollingerOptions): Promise<number> {
+  private options: IBollingerOptions;
+  constructor(options: IBollingerOptions) {
+    this.options = options;
+  }
+
+  public async advice({ quotePrice, candles }: IMarketData): Promise<number> {
     logger.debug('Quote Price', quotePrice);
     logger.debug(`Last close: ${candles.close[0]}`);
-    const bollinger = bollingerBands(candles, bollingerOptions);
+    logger.debug('CANDLES:', candles);
+    
+    const bollinger = bollingerBands(candles, this.options);
+    logger.debug('BB:', bollinger);
     if (quotePrice.ask >= bollinger.upperBand[0]) {
       logger.debug('Shortea papu!');
       return -1;

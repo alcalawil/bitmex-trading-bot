@@ -69,7 +69,7 @@ export abstract class BitmexAbstractAPI {
     try {
       response = await axios(options);
     } catch (err) {
-      const message = `${err.toJSON().message} \n ${err.toJSON().description}`;
+      const message = `${err.toJSON().message} \n  ${err.response.data.error.message} \n ${err.toJSON().description}`;
       logger.debug(message);
       throw new Error(message);
     }

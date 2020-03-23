@@ -1,26 +1,61 @@
 import { v4 as uuidv4 } from 'uuid';
-import { operationsService as trader } from '@trader';
+import { Trader } from '@trader';
 import { logger } from '../shared';
 import { strategyFactory } from './strategies';
 import { OrderPost, Order } from '@bitmexInterfaces';
 import { ETL } from '@etl';
 
+import { MeanReversionBB } from './strategies/MeanReversionBB';
+
 export default class StrategyModule {
   // TODO: Usar algún interval más robusto
   private interval: NodeJS.Timeout | null;
   private etl: ETL;
+  private trader: Trader;
 
-  constructor(etl: ETL) {
-    // TODO: Inyectar una instancia de trader
+  constructor(trader: Trader, etl: ETL) {
     this.interval = null;
     this.etl = etl;
+    this.trader = trader;
   }
 
-  public start() {
+  public async start() {
     logger.debug('Strategy starting...');
-    this.interval = setInterval(() => {
-      this.strategyCycle(); // TODO: Validar que un ciclo aterior se haya ejecutado para poder llamar al siguiente. Igual esto a ser ejecutado desde eventos en vez d eun interval
-    }, 15000);
+    const activeStrategy = new MeanReversionBB('MeanReversionBB', this.trader);
+    const marketData = await this.etl.getMarketData('XBTUSD', '1m', 50);
+
+
+    /* ------------------------ Event Handlers -------------------------------- */
+
+    // Candle 1m event
+    this.etl.getCandlesObservable('XBTUSD', '1m').subscribe({
+      next: ({ data: candles }) => {
+        logger.debug('New 1m candle event');
+      },
+    });
+
+    // Order change events
+    this.etl.getOrdersObservable('XBTUSD').subscribe({
+      next: ({ data: orders }) => {
+        const orderFilled = orders.filter(order => order.ordStatus === 'Filled');
+
+        orderFilled.map(async ({ clOrdID }) => {
+          // TODO: Traer esta orden desde el state o desde mongo
+          const order = await this.trader.getOrderById(clOrdID, 'XBTUSD');
+
+          if (!order) {
+            logger.debug(`Order ${clOrdID} does not exist`);
+            return;
+          }
+          // TODO: Sacar esta marketData del state
+          logger.debug(`ORDER FILLED: ${order.clOrdID} ${order.price} QTY: ${order.cumQty} SIDE: ${order.side}}`);
+
+          activeStrategy.onFill(order, marketData);
+        });
+      },
+    });
+
+    activeStrategy.onStart(marketData);
   }
 
   public stop() {
@@ -31,53 +66,17 @@ export default class StrategyModule {
     logger.debug('Strategy module stopped');
   }
 
-  public async strategyCycle() {
-    logger.debug('New Cycle');
-
-    // TODO: Recibir estos parámetros desde el config
-    const marketData = await this.etl.getMarketData('XBTUSD', '1m', 50);
-
-    const activeStrategy = strategyFactory('MeanReversionBB');
-    const strategyOrder = await activeStrategy.generateOrder('XBTUSD', marketData);
-
-    if (!strategyOrder) {
-      logger.info('There are no orders to post');
-      return;
-    }
-    const { symbol, amount, side, price, expiration } = strategyOrder;
-    /** Acá hay que hacer:
-     *  Validar reglas de negocio. Ej: Chequear que haya suficiente volumen disponible como lo requiere la orden segun reglas de negocio
-     *  Completar con valores default los datos que no haya proporcionado la estrategia. Ej: stop loss
-     *
-     */
-
-    // TODO: Hacer el parseo por fuera, debería hacerse en la etapa previa (la de validación)
-    const order = await trader.postOrder({
-      clOrdID: uuidv4(),
-      symbol: symbol,
-      orderQty: amount || 1,
-      side: side === -1 ? 'Sell' : 'Buy',
-      price: price,
+  async cancelAfter(timeInMilliseconds: number, orderId: string) {
+    return new Promise<Order>((resolve, reject) => {
+      setTimeout(async () => {
+        try {
+          const canceledOrder = await this.trader.cancelOrder({ clOrdID: orderId });
+          logger.debug('<<< An order was canceled:', canceledOrder);
+          return resolve(canceledOrder);
+        } catch (err) {
+          return reject(err);
+        }
+      }, timeInMilliseconds);
     });
-
-    logger.debug('>>> Order response:', order);
-
-    cancelAfter(expiration, order.clOrdID);
   }
 }
-
-// -----------------------------------------------------------------
-
-const cancelAfter = (timeInMilliseconds: number, orderId: string) => {
-  return new Promise<Order>((resolve, reject) => {
-    setTimeout(async () => {
-      try {
-        const canceledOrder = await trader.cancelOrder({ clOrdID: orderId });
-        logger.debug('<<< An order was canceled:', canceledOrder);
-        return resolve(canceledOrder);
-      } catch (err) {
-        return reject(err);
-      }
-    }, timeInMilliseconds);
-  });
-};

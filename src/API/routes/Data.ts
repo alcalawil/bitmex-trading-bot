@@ -2,8 +2,10 @@ import { Request, Response, Router, NextFunction } from 'express';
 import { CREATED, OK, INTERNAL_SERVER_ERROR } from 'http-status-codes';
 import { logger } from '@shared';
 import { HTTPError } from '@types';
-import { gettersService } from '@services';
+import { Trader } from '@trader';
+import { ETL } from '@etl';
 
+export default (trader: Trader, etl: ETL) => {
 const router = Router();
 
 /****** ************************************************************************
@@ -12,7 +14,7 @@ const router = Router();
 router.get('/ohlc', async (req: Request, res: Response, next: NextFunction) => {
   const { symbol, filter, count, start, binSize } = req.query;
   try {
-    const balances = await gettersService.getOHLC({ symbol, binSize, count, filter, reverse: true });
+    const balances = await etl.getCandles( symbol, binSize, count);
     res.status(CREATED).json(balances);
   } catch (err) {
     logger.error(err.message);
@@ -20,4 +22,5 @@ router.get('/ohlc', async (req: Request, res: Response, next: NextFunction) => {
   }
 });
 
-export default router;
+return router;
+};
