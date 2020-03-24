@@ -1,6 +1,6 @@
 import { config } from '@config';
 import { BitmexAPI } from '@bitmex';
-import { OrderPost, OrderDelete, PositionLeveragePost, OrderQuery } from '@bitmexInterfaces';
+import { OrderPost, OrderDelete, PositionLeveragePost, OrderQuery, PositionQuery } from '@bitmexInterfaces';
 
 export class Trader {
   private api: BitmexAPI;
@@ -43,8 +43,14 @@ export class Trader {
     return orders;
   }
 
+  public async getPosition(symbol = 'XBTUSD') {
+    const positions = await this.api.Position.get({ filter: `"symbol": "${symbol}"` });
+    return positions[0];
+  }
+
   public async getOrderById(orderId: string, pair: string) {
-    const order = await (await this.getMyOrders({ symbol: pair })).find(order => (order.clOrdID = orderId));
+    const orders = await this.getMyOrders({ symbol: pair, reverse: true });
+    const order = orders?.find(order => order.clOrdID === orderId);
     return order;
   }
 
