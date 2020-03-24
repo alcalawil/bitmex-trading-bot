@@ -23,6 +23,25 @@ export default (trader: Trader, etl: ETL) => {
       logger.error(err.message);
       next(new HTTPError(err.message, INTERNAL_SERVER_ERROR));
     }
+  });  
+  
+  /*******************************************************************************
+   *                       GET Order - "GET /api/order/some_id"
+   ******************************************************************************/
+  router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
+    const id: string = req.params.id;
+
+    try {
+
+      const order = await trader.getOrderById(id, 'XBTUSD');
+      if (!order) {
+        res.status(NOT_FOUND).json();
+      }
+      res.status(CREATED).json(order);
+    } catch (err) {
+      logger.error(err.message);
+      next(new HTTPError(err.message, INTERNAL_SERVER_ERROR));
+    }
   });
 
   /*******************************************************************************
